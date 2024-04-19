@@ -1,5 +1,5 @@
 import { VicarLoaderBase } from './VicarLoaderBase.js';
-import { DataTexture, RGBAFormat, DefaultLoadingManager, LinearFilter, LinearMipMapLinearFilter } from 'three';
+import { DataTexture, RGBAFormat, DefaultLoadingManager, LinearFilter, LinearMipMapLinearFilter, LinearSRGBColorSpace, FloatType } from 'three';
 
 /**
  * @typedef {Object} VicarTextureResult
@@ -74,6 +74,55 @@ export class VicarLoader extends VicarLoaderBase {
 
 		}
 
+		// // Assume BSQ organization
+		// const ORG = result.labels.find( label => label.name === 'ORG' ).value;
+		// if ( ORG !== 'BSQ' ) {
+
+		// 	throw new Error( 'VicarLoader: File is not in BSQ order which is the only supported organization for the file at the moment.' );
+
+		// }
+
+		// texture.image.width = result.width;
+		// texture.image.height = result.height;
+		// texture.image.data = result.data;
+		// texture.minFilter = LinearMipMapLinearFilter;
+		// texture.magFilter = LinearFilter;
+		// texture.format = RGBAFormat;
+		// texture.flipY = true;
+		// texture.generateMipmaps = true;
+		// texture.needsUpdate = true;
+
+		// switch ( result.labels.FORMAT ) {
+
+		// 	case 'BYTE':
+		// 		// byte
+		// 		break;
+		// 	case 'WORD':
+		// 	case 'HALF':
+		// 		// int16? half float?
+		// 		break;
+		// 	case 'LONG':
+		// 	case 'FULL':
+		// 		// int32
+		// 		break;
+		// 	case 'REAL':
+		// 		// float32
+		// 		break;
+		// 	case 'DOUB':
+		// 		// float64
+		// 		texture.image.data = Float32Array.from( result.data );
+		// 		break;
+		// 	case 'COMPLEX':
+		// 	case 'COMP':
+		// 		result.texture = null;
+		// 		return;
+		// }
+
+
+
+
+
+
 		// find the min and max value
 		// TODO: figure this out?
 		let max = - Infinity;
@@ -91,14 +140,6 @@ export class VicarLoader extends VicarLoaderBase {
 
 		}
 
-		// Assume BSQ organization
-		const ORG = result.labels.find( label => label.name === 'ORG' ).value;
-		if ( ORG !== 'BSQ' ) {
-
-			throw new Error( 'VicarLoader: File is not in BSQ order which is the only supported organization for the file at the moment.' );
-
-		}
-
 		let maxValue = max;
 		if ( ! ( result.data instanceof Float32Array ) || ! ( result.data instanceof Float64Array ) ) {
 
@@ -111,7 +152,7 @@ export class VicarLoader extends VicarLoaderBase {
 
 		}
 
-		const data = new Uint8ClampedArray( stride * 4 );
+		const data = new Float32Array( stride * 4 );
 		for ( let i = 0; i < stride; i ++ ) {
 
 			const r = result.data[ stride * 0 + i ] / maxValue;
@@ -133,10 +174,10 @@ export class VicarLoader extends VicarLoaderBase {
 
 			}
 
-			data[ i * 4 + 0 ] = r * 255;
-			data[ i * 4 + 1 ] = g * 255;
-			data[ i * 4 + 2 ] = b * 255;
-			data[ i * 4 + 3 ] = 255;
+			data[ i * 4 + 0 ] = r * 1;
+			data[ i * 4 + 1 ] = g * 1;
+			data[ i * 4 + 2 ] = b * 1;
+			data[ i * 4 + 3 ] = 1;
 
 		}
 
@@ -147,8 +188,10 @@ export class VicarLoader extends VicarLoaderBase {
 		texture.minFilter = LinearMipMapLinearFilter;
 		texture.magFilter = LinearFilter;
 		texture.format = RGBAFormat;
+		texture.type = FloatType;
 		texture.flipY = true;
 		texture.generateMipmaps = true;
+		texture.colorSpace = LinearSRGBColorSpace;
 		texture.needsUpdate = true;
 
 		result.texture = texture;

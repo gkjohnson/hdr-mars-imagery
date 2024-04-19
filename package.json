@@ -1,11 +1,14 @@
 {
   "name": "hdr-mars-imagery",
   "scripts": {
+    "start": "parcel serve ./*.html --dist-dir ./dev-bundle/ --no-hmr",
+    "build-examples": "parcel build ./*.html --dist-dir ./bundle/ --public-url . --no-cache --no-content-hash",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Garrett Johnson <garrett.kjohnson@gmail.com>",
   "dependencies": {
     "@monogrid/gainmap-js": "^3.0.5",
-    "three": "^0.163.0"
+    "three": "^0.163.0",
+    "parcel": "^2.11.0"
   }
 }
