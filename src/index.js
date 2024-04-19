@@ -4,30 +4,46 @@ import { VicarLoader } from './libs/loaders/vicar-loader/VicarLoader.js';
 import { WebGLRenderer, MeshBasicMaterial } from 'three';
 import { FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass.js';
 import { encodeHDR } from './encodeHDR.js';
+import { GithubLfsResolver } from './libs/GithubLfsResolver.js';
 
 const searchParams = new URL( location.href ).searchParams;
 const boost = parseFloat( searchParams.get( 'boost' ) ) || 1;
 const imageId = parseInt( searchParams.get( 'image' ) ) || 0;
 const images = [
-    new URL( '../images/FLF_0016_0668369736_116RZS_N0030578FHAZ02003_0M0195J06.IMG', import.meta.url ).toString(),
-    new URL( '../images/FLF_0036_0670143894_633RZS_N0031392FHAZ00201_0A0295J03.IMG', import.meta.url ).toString(),
-    new URL( '../images/FLF_0396_0702101051_786ECM_N0180000FHAZ02220_01_195J01.IMG', import.meta.url ).toString(),
-    new URL( '../images/FLF_0991_0754919119_440EDR_N0470094FHAZ02418_01_295J02.IMG', import.meta.url ).toString(),
-    new URL( '../images/FLF_1004_0756083744_221TDR_N0480748FHAZ02418_01_295J01.IMG', import.meta.url ).toString(),
-    new URL( '../images/NLF_0014_0668187059_196RZS_N0030038NCAM00111_0A00LLJ04.IMG', import.meta.url ).toString(),
-    new URL( '../images/NLF_0029_0669530684_574RZS_N0030828NCAM03029_0A0295J02.IMG', import.meta.url ).toString(),
-    new URL( '../images/NLM_0033_0669876745_349RZS_N0031374SAPP00601_0A02LLJ02.IMG', import.meta.url ).toString(),
-    new URL( '../images/NRF_0009_0667755959_167RZS_N0030000NCAM05000_0A30LLJ03.IMG', import.meta.url ).toString(),
-    new URL( '../images/RLF_0015_0668286987_788RZS_N0030386RHAZ02000_0A0295J05.IMG', import.meta.url ).toString(),
-    new URL( '../images/RRF_0029_0669530400_036RZS_N0030828RHAZ02000_0A0295J02.IMG', import.meta.url ).toString(),
-    new URL( '../images/ZLF_0011_0667929820_098RZS_N0030000ZCAM00015_034085J01.IMG', import.meta.url ).toString(),
-    new URL( '../images/ZLF_0036_0670134061_081RAD_N0031392ZCAM03107_1100LUJ01.IMG', import.meta.url ).toString(),
-    new URL( '../images/ZR6_0036_0670134141_081RAD_N0031392ZCAM03107_1100LUJ01.IMG', import.meta.url ).toString(),
-    new URL( '../images/ZRF_0002_0667131500_647RZS_N0010052ZCAM00012_0630LUJ02.IMG', import.meta.url ).toString(),
-    new URL( '../images/ZRF_0004_0667303029_000RZS_N0010052AUT_04096_110085J03.IMG', import.meta.url ).toString(),
+    'images/FLF_0016_0668369736_116RZS_N0030578FHAZ02003_0M0195J06.IMG',
+    'images/FLF_0036_0670143894_633RZS_N0031392FHAZ00201_0A0295J03.IMG',
+    'images/FLF_0396_0702101051_786ECM_N0180000FHAZ02220_01_195J01.IMG',
+    'images/FLF_0991_0754919119_440EDR_N0470094FHAZ02418_01_295J02.IMG',
+    'images/FLF_1004_0756083744_221TDR_N0480748FHAZ02418_01_295J01.IMG',
+    'images/NLF_0014_0668187059_196RZS_N0030038NCAM00111_0A00LLJ04.IMG',
+    'images/NLF_0029_0669530684_574RZS_N0030828NCAM03029_0A0295J02.IMG',
+    'images/NLM_0033_0669876745_349RZS_N0031374SAPP00601_0A02LLJ02.IMG',
+    'images/NRF_0009_0667755959_167RZS_N0030000NCAM05000_0A30LLJ03.IMG',
+    'images/RLF_0015_0668286987_788RZS_N0030386RHAZ02000_0A0295J05.IMG',
+    'images/RRF_0029_0669530400_036RZS_N0030828RHAZ02000_0A0295J02.IMG',
+    'images/ZLF_0011_0667929820_098RZS_N0030000ZCAM00015_034085J01.IMG',
+    'images/ZLF_0036_0670134061_081RAD_N0031392ZCAM03107_1100LUJ01.IMG',
+    'images/ZR6_0036_0670134141_081RAD_N0031392ZCAM03107_1100LUJ01.IMG',
+    'images/ZRF_0002_0667131500_647RZS_N0010052ZCAM00012_0630LUJ02.IMG',
+    'images/ZRF_0004_0667303029_000RZS_N0010052AUT_04096_110085J03.IMG',
 ];
 
-const IMG_URL = images[ imageId % images.length ];
+const resolver = new GithubLfsResolver();
+resolver.targetStem = 'https://media.githubusercontent.com/media';
+resolver.branch = 'main';
+resolver.repo = 'hdr-mars-imagery';
+resolver.org = 'gkjohnson';
+if ( /github.io/g.test( location.origin ) ) {
+
+    resolver.pagesStem = location.origin + '/hdr-mars-imagery';
+
+} else {
+
+    resolver.pagesStem = location.origin;
+
+}
+
+const IMG_URL = resolver.resolve( images[ imageId % images.length ] );
 const WIDTH = 750;
 
 ( async () => {
@@ -91,6 +107,8 @@ const WIDTH = 750;
         colorSpace: LinearSRGBColorSpace,
         type: FloatType,
     };
+
+    console.log( imageInformation )
 
     const image = document.createElement( 'img' );
     imageContainer.appendChild( image );
