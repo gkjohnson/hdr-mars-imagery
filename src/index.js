@@ -62,14 +62,7 @@ const WIDTH = 750;
     document.body.style.touchAction = 'none';
 
     // add centering container
-    const container = document.createElement( 'div' );
-    container.style.display = 'inline-flex';
-    container.style.flexDirection = 'row';
-    container.style.position = 'absolute';
-    container.style.left = '50%';
-    container.style.top = '50%';
-    container.style.transform = 'translate( -50%, -50% )';
-    document.body.appendChild( container );
+    const container = document.querySelector( '#container' );
 
     // add renderer
     const aspect = result.product.height / result.product.width;
