@@ -8,7 +8,11 @@
   "author": "Garrett Johnson <garrett.kjohnson@gmail.com>",
   "dependencies": {
     "@monogrid/gainmap-js": "^3.0.5",
-    "three": "^0.163.0",
-    "parcel": "^2.11.0"
+    "parcel": "^2.11.0",
+    "three": "^0.163.0"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "process": "^0.11.10"
   }
 }
