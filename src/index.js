@@ -70,7 +70,8 @@ const WIDTH = 750;
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( WIDTH, WIDTH * aspect );
     renderer.domElement.style.borderRadius = '10px';
-    renderer.domElement.style.marginRight = '3px';
+    renderer.domElement.style.marginRight = '5px';
+    renderer.domElement.style.background = 'black';
     container.appendChild( renderer.domElement );
 
     const quad = new FullScreenQuad( new MeshBasicMaterial( { map: texture } ) );
@@ -82,6 +83,7 @@ const WIDTH = 750;
     imageContainer.style.height = `${ aspect * WIDTH }px`;
     imageContainer.style.overflow = 'hidden';
     imageContainer.style.borderRadius = '10px';
+    imageContainer.style.background = 'black';
     container.appendChild( imageContainer );
 
     // boost the data based on query parameter
