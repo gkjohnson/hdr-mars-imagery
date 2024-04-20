@@ -69,6 +69,8 @@ const WIDTH = 750;
     const renderer = new WebGLRenderer( { alpha: true } );
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( WIDTH, WIDTH * aspect );
+    renderer.domElement.style.borderRadius = '10px';
+    renderer.domElement.style.marginRight = '3px';
     container.appendChild( renderer.domElement );
 
     const quad = new FullScreenQuad( new MeshBasicMaterial( { map: texture } ) );
@@ -79,6 +81,7 @@ const WIDTH = 750;
     imageContainer.style.width = `${ WIDTH }px`;
     imageContainer.style.height = `${ aspect * WIDTH }px`;
     imageContainer.style.overflow = 'hidden';
+    imageContainer.style.borderRadius = '10px';
     container.appendChild( imageContainer );
 
     // boost the data based on query parameter
