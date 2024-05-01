@@ -141,7 +141,7 @@ export class VicarLoader extends VicarLoaderBase {
 		}
 
 		let maxValue = max;
-		if ( ! ( result.data instanceof Float32Array ) || ! ( result.data instanceof Float64Array ) ) {
+		if ( ! ( result.data instanceof Float32Array ) && ! ( result.data instanceof Float64Array ) ) {
 
 			const usefulBits = Math.ceil( Math.log( max ) / Math.LN2 );
 			maxValue = 2 ** usefulBits;
